@@ -132,7 +132,6 @@ def main(argv):
     result = do_attack(target, payload)
     if result == None:
         print("[-] Using other gadgets")
-    print(result.text)
     result = get_echo(target)
     try:
         echo = result.json()
