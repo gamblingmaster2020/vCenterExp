@@ -142,5 +142,5 @@ def main(argv):
 if __name__ == "__main__":
     try:
         main(sys.argv)
-    except:
+    except IndexError:
         print("Usage: python3 21985.py 1.1.1.1 whoami")
